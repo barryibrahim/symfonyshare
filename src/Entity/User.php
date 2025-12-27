@@ -51,9 +51,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Fichier::class, mappedBy: 'user')]
     private Collection $fichiers;
 
+    #[ORM\Column(length: 255)]
+    private ?string $adresse = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $ville = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $codepostal = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $telephone = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $description = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $pseudo = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $status = null;
+
+    /**
+     * @var Collection<int, LogConnexion>
+     */
+    #[ORM\OneToMany(targetEntity: LogConnexion::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $logConnexions;
+
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Photo $photo = null;
+
+  
+
     public function __construct()
     {
         $this->fichiers = new ArrayCollection();
+        $this->logConnexions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -196,4 +229,142 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getAdresse(): ?string
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(string $adresse): static
+    {
+        $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    public function getVille(): ?string
+    {
+        return $this->ville;
+    }
+
+    public function setVille(string $ville): static
+    {
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    public function getCodepostal(): ?string
+    {
+        return $this->codepostal;
+    }
+
+    public function setCodepostal(string $codepostal): static
+    {
+        $this->codepostal = $codepostal;
+
+        return $this;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(string $telephone): static
+    {
+        $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getPseudo(): ?string
+    {
+        return $this->pseudo;
+    }
+
+    public function setPseudo(string $pseudo): static
+    {
+        $this->pseudo = $pseudo;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LogConnexion>
+     */
+    public function getLogConnexions(): Collection
+    {
+        return $this->logConnexions;
+    }
+
+    public function addLogConnexion(LogConnexion $logConnexion): static
+    {
+        if (!$this->logConnexions->contains($logConnexion)) {
+            $this->logConnexions->add($logConnexion);
+            $logConnexion->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLogConnexion(LogConnexion $logConnexion): static
+    {
+        if ($this->logConnexions->removeElement($logConnexion)) {
+            // set the owning side to null (unless already changed)
+            if ($logConnexion->getUser() === $this) {
+                $logConnexion->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPhoto(): ?Photo
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?Photo $photo): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($photo === null && $this->photo !== null) {
+            $this->photo->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($photo !== null && $photo->getUser() !== $this) {
+            $photo->setUser($this);
+        }
+
+        $this->photo = $photo;
+
+        return $this;
+    }
+
+   
 }

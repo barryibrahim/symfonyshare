@@ -2,6 +2,10 @@
 
 namespace App\Security;
 
+use App\Entity\LogConnexion; // ajouter
+use App\Entity\User; // ajouter
+use Doctrine\ORM\EntityManagerInterface; // ajouter
+
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,9 +25,11 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
     use TargetPathTrait;
 
     public const LOGIN_ROUTE = 'app_login';
+    private EntityManagerInterface $em; // ajouter
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    public function __construct(private UrlGeneratorInterface $urlGenerator, EntityManagerInterface $em) // ajouter
     {
+        $this->em = $em; // ajouter
     }
 
     public function authenticate(Request $request): Passport
@@ -44,13 +50,26 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+        $user = $token->getUser(); // ajouter
+
+        // ✅ créer un log uniquement si $user est bien une instance de User
+        if ($user instanceof User) {
+            $log = new LogConnexion(); // ✅ créer le log
+            $log->setUser($user); // ✅ associer le log à l'utilisateur
+            $log->setTimeConnexion(new \DateTime('Europe/Paris')); // ✅ date/heure actuelle
+            $log->setStatus('Connexion réussie'); // ✅ status du log
+
+            $this->em->persist($log); // ✅ préparer l'insertion
+            $this->em->flush(); // ✅ exécuter l'insertion en base
+        }
+
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
 
         // For example:
         return new RedirectResponse($this->urlGenerator->generate('app_accueil'));
-        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        throw new \Exception('TODO: provide a valid redirect inside ' . __FILE__);
     }
 
     protected function getLoginUrl(Request $request): string

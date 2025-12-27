@@ -7,15 +7,30 @@
 		<h1 class="text-center text-primary mt-4 pt-4 display-1 fw-bold">
 			Liste des utilisateurs</h1>
 		<div class="row justify-content-center">
-			<div class="col-12 col-md-8 bg-white p-4 m-0 text-primary">
-				<div class="table-responsive">
+			<div class="col-12 bg-white p-4">
+			<div class="table-responsive">
+			{{ form_start(form) }}
 					<table class="table table-hover">
 						<thead>
 							<tr class="fw-bold text-primary">
 								<th scope="col">Email</th>
 								<th scope="col">Date d'inscription</th>
 								<th scope="col">Rôle</th>
-							
+								<th scope="col">Nom</th>
+								<th scope="col">Prenom</th>
+								<th scope="col">Adresse</th>
+								<th scope="col">Ville</th>
+								<th scope="col">Codepostal</th>
+								<th scope="col">Telephone</th>
+								<th scope="col">Description</th>
+								<th scope="col">Pseudo</th>
+								<th scope="col">Status</th>
+								<th scope="col">Modifier</th>
+								<th scope="col">Supprimer</th>
+								<th scope="col">Log</th>
+								<th scope="col"></th>
+								<th scope="col"></th>
+								<th scope="col"></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -31,11 +46,32 @@
 										{% else %}
 											<span class="badge bg-primary">Utilisateur</span>
 										{% endif %}
+											<td>{{ user.nom  }}</td>
+											<td>{{ user.prenom  }}</td>
+											<td>{{ user.adresse  }}</td>
+											<td>{{ user.ville }}</td>
+											<td>{{ user.codepostal }}</td>
+											<td>{{ user.telephone }}</td>
+											<td>{{ user.description }}</td>
+											<td>{{ user.pseudo }}</td>
+											<td>{{ user.status }}</td>
 									</td>
+									<td><a href="{{path("app_edit_user",{'id':user.id})}}"><i class="bi bi-pen-fill" style="color: black;"></i></a></td>
+								<td><a href="{{path("app_delete_user",{'id':user.id})}}"><i class="bi bi-trash-fill" style="color: black;"></i></a></td>
+									<td>
+										<a href="{{path("app_log_connexion",{'id': user.id})}}"> 
+										<i class="bi bi-arrow-up-right-circle-fill" style="color: black;"></i>
+										</a>
+									</td>
+								<td>{{ form_widget(form.users[user.id]) }}</td>
+							
 								</tr>
+								
 							{% endfor %}
 						</tbody>
 					</table>
+					{{ form_widget(form.supprimer) }}
+                    {{ form_end(form) }}
 				</div>
 			</div>
 		</div>

@@ -29,8 +29,12 @@ class RegistrationController extends AbstractController
             // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
             $user->setDateInscription(new \Datetime());
+            $user->setStatus('active');
             $entityManager->persist($user);
             $entityManager->flush();
+          
+            
+            
 
             // do anything else you need here, like send an email
 
@@ -39,6 +43,7 @@ class RegistrationController extends AbstractController
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
+            
         ]);
     }
 }

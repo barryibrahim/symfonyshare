@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} Log de Connexion
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <h1 class="text-center text-primary mt-4 pt-4 display-1 fw-bold">
+        Log de connexion
+    </h1>
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 bg-white p-4 m-0 text-primary">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr class="fw-bold text-primary">
+                            <th scope="col">Id</th>
+                            <th scope="col">Id user</th>
+                              <th scope="col">Email</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Date de connexion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for logConnexion in logConnexions %}
+                            <tr class="{{ cycle(['table-primary', 'table-secondary'], loop.index0) }}">
+                                <td>{{ logConnexion.id }}</td>
+                                <td>{{ logConnexion.user.id }}</td>
+                                <td>{{ logConnexion.user.email }}</td>
+                                  <td>{{logConnexion.status }}</td>
+                                <td>{{ logConnexion.timeConnexion |date("d-m-Y à H:i:s") }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

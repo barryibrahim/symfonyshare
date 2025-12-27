@@ -66,7 +66,7 @@ final class FichierController extends AbstractController
     }
 
 
-    #[Route('/liste-fichier', name: 'app_liste_fichier')]
+    #[Route('/mod-liste-fichier', name: 'app_liste_fichier')]
     public function listeFichier(FichierRepository $fichierRepository): Response
     {
         $fichiers = $fichierRepository->findAll();
@@ -74,7 +74,7 @@ final class FichierController extends AbstractController
             'fichiers' => $fichiers,
         ]);
     }
-    #[Route('/liste-fichiers-par-utilisateur', name: 'app_liste_fichiers_par_utilisateur')]
+    #[Route('/mod-liste-fichiers-par-utilisateur', name: 'app_liste_fichiers_par_utilisateur')]
     public function listeFichiersParUtilisateur(UserRepository $userRepository): Response
     {
         $users = $userRepository->findBy([], ['nom' => 'asc', 'prenom' => 'asc']);
@@ -84,7 +84,7 @@ final class FichierController extends AbstractController
     #[Route('/private-telechargement-fichier/{id}', name: 'app_telechargement_fichier', requirements: ["id" => "\d+"])]
     public function telechargementFichier(Fichier $fichier)
     {
-        if ($fichier == null) {
+        if ($fichier !== null) {
             return $this->redirectToRoute('app_liste_fichiers_par_utilisateur');
         } else {
             return $this->file(

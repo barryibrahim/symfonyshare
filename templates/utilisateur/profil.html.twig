@@ -4,15 +4,46 @@
 {% endblock %}
 
 {% block body %}
-	<div class="container">
+	<div class="container ">
+		<div
+				class="text-center ">
+				
+				{% if utilisateur.photo %}
+					<img src="{{ asset('uploads/photos/' ~ utilisateur.photo.nomFichier) }}" alt="Photo de profil de {{ utilisateur.photo.nomFichier }}"   alt="Photo de profil de {{ utilisateur.pseudo }}" 
+                     style="width: 150px; height: 100px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
+				{% else %}
+					 <p>Aucune photo de profil</p>
+				{% endif %}
+			</div>
 		<h1 class="mt-4 text-primary">Mon Profil</h1>
 		<ul class="list-group mt-3">
 			<li class="list-group-item">
+			<strong>Nom :</strong>
 				{{app.user.nom}}
+				<li class="list-group-item">
+				<strong>Prénom :</strong>
 				{{ utilisateur.prenom }}</li>
+				<li class="list-group-item">
+				<strong>Pseudo :</strong>
+				{{ utilisateur.pseudo }}</li>
 			<li class="list-group-item">
 				<strong>Email :</strong>
 				{{ utilisateur.email }}</li>
+				<li class="list-group-item">
+				<strong>Adresse :</strong>
+				{{ utilisateur.adresse }}</li>
+				<li class="list-group-item">
+				<strong>Ville :</strong>
+				{{ utilisateur.ville }}</li>
+				<li class="list-group-item">
+				<strong>Code Postal :</strong>
+				{{ utilisateur.codepostal }}</li>
+				<li class="list-group-item">
+				<strong>Tel :</strong>
+				{{ utilisateur.telephone }}</li>
+				<li class="list-group-item">
+				<strong>Description :</strong>
+				{{ utilisateur.description }}</li>
 			<li class="list-group-item">
 				<strong>Date d'inscription :</strong>
 				{{ utilisateur.dateinscription | date("d-m-Y H:i:s") }}</li>
@@ -27,5 +58,17 @@
 				{% endif %}
 			</li>
 		</ul>
+	</div>
+	<div class="text-center">
+			<a class="btn btn-lg btn-primary mt-4" href="{{ path('app_logout') }}">
+				Déconnexion
+			</a>
+			<a class="btn btn-lg btn-primary mt-4" href="{{ path('app_edit_profil') }}">
+				Modifier votre profil
+			</a>
+			<a class="btn btn-lg btn-primary mt-4" href="{{path("app_edit_password",{'id':app.user.id})}}">
+				Modifier Votre Mot de Passe
+			</a>
+		</div>
 	</div>
 {% endblock %}

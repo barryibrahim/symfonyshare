@@ -6,6 +6,7 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
@@ -13,6 +14,9 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Validator\Constraints\NotCompromisedPassword;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class RegistrationFormType extends AbstractType
 {
@@ -25,6 +29,53 @@ class RegistrationFormType extends AbstractType
             'fw-bold']])
             ->add('prenom', TextType::class, ['attr' => ['class'=> 'form-control'], 'label_attr' => ['class'=>
             'fw-bold']])
+            ->add('adresse', TextareaType::class, [
+                'attr' => ['class' => 'form-control'],
+                'label_attr' => ['class' => 'fw-bold'],
+                'constraints' => [
+                    new NotBlank(['message' => "L'adresse est requise."]),
+                ],
+            ])
+            ->add('ville', TextType::class, [
+                'attr' => ['class' => 'form-control'],
+                'label_attr' => ['class' => 'fw-bold'],
+                'constraints' => [
+                    new NotBlank(['message' => 'La ville est requise.']),
+                ],
+            ])
+            ->add('codepostal', TextType::class, [
+                'attr' => ['class' => 'form-control'],
+                'label_attr' => ['class' => 'fw-bold'],
+                'constraints' => [
+                    new NotBlank(['message' => 'Le code postal est requis.']),
+                    new Length([
+                        'min' => 5,
+                        'max' => 5,
+                        'exactMessage' => 'Le code postal doit contenir exactement {{ limit }} chiffres.',
+                    ]),
+                ],
+            ])
+            ->add('description', TextType::class, [
+                'attr' => ['class' => 'form-control'],
+                'label_attr' => ['class' => 'fw-bold'],
+                'constraints' => [
+                    new NotBlank(['message' => 'La description est requise.']),
+                ],
+            ])
+            ->add('pseudo', TextType::class, [
+                'attr' => ['class' => 'form-control'],
+                'label_attr' => ['class' => 'fw-bold'],
+                'constraints' => [
+                    new NotBlank(['message' => 'Le pseudo est requis.']),
+                ],
+            ])
+            ->add('telephone', TextType::class, [
+                'attr' => ['class' => 'form-control'],
+                'label_attr' => ['class' => 'fw-bold'],
+                'constraints' => [
+                    new NotBlank(['message' => 'Le numéro est requis.']),
+                ],
+            ])
             ->add('agreeTerms', CheckboxType::class, [
                 'label_attr' => ['class' => 'me-1 fw-bold'],
                 'mapped' => false,
@@ -35,25 +86,51 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('plainPassword', PasswordType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
+            ->add('plainPassword', RepeatedType::class, [
+                'type' => PasswordType::class,
                 'mapped' => false,
-                'label_attr' => ['class' => 'fw-bold'],
-                'attr' => ['autocomplete' => 'new-password', 'class' => 'form-control'],
+                'first_options' => [
+                    'label' => 'Mot de passe',
+                    'attr' => ['autocomplete' => 'new-password', 'class' => 'form-control'],
+                    'label_attr' => ['class' => 'fw-bold'],
+                ],
+                'second_options' => [
+                    'label' => 'Confirmer le mot de passe',
+                    'attr' => ['autocomplete' => 'new-password', 'class' => 'form-control'],
+                    'label_attr' => ['class' => 'fw-bold'],
+                ],
+                'invalid_message' => 'Les deux mots de passe doivent correspondre.',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password',
+                        'message' => 'Veuillez saisir un mot de passe.',
                     ]),
                     new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 4096,
+                        'min' => 12,
+                        'minMessage' => 'Le mot de passe doit contenir au moins 12 caractères.',
+                    ]),
+                    new Regex([
+                        'pattern' => '/[A-Z]/',
+                        'message' => 'Le mot de passe doit contenir au moins une lettre majuscule.',
+                    ]),
+                    new Regex([
+                        'pattern' => '/[a-z]/',
+                        'message' => 'Le mot de passe doit contenir au moins une lettre minuscule.',
+                    ]),
+                    new Regex([
+                        'pattern' => '/\d/',
+                        'message' => 'Le mot de passe doit contenir au moins un chiffre.',
+                    ]),
+                    new Regex([
+                        'pattern' => '/[\W_]/',
+                        'message' => 'Le mot de passe doit contenir au moins un caractère spécial.',
+                    ]),
+                    new NotCompromisedPassword([
+                        'message' => 'Ce mot de passe a déjà été compromis sur Internet, veuillez en choisir un autre.',
                     ]),
                 ],
             ]);
     }
+
 
     public function configureOptions(OptionsResolver $resolver): void
     {

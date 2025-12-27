@@ -57,11 +57,7 @@
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
 			<div class="dropdown-menu">
-				<a class="dropdown-item" href="#">Action</a>
-				<a class="dropdown-item" href="#">Another action</a>
-				<a class="dropdown-item" href="#">Something else here</a>
-				<div class="dropdown-divider"></div>
-				<a class="dropdown-item" href="#">Separated link</a>
+				
 				<a class="nav-link" href="{{path('app_propos')}}">A PROPOS</a>
 				<a class="nav-link" href="{{path('app_mentionslegale')}}">MENTIONS LEGALE</a>
 			</div>
@@ -84,24 +80,30 @@ is_granted('IS_AUTHENTICATED_FULLY') %}
 			</li>
 
 		{% else %}
-			{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MOD')%}
-				<li class="nav-item">
-					<a class="nav-link text-white" href="{{path('app_liste_contacts')}}">Liste des contacts</a>
-				</li>
+		
+				<li class="nav-item icon">
+								<a class="nav-link" href="{{ path('app_profil') }}">
+									<i class="bi bi-person-circle" style="font-size: 1.5rem;"></i>
+								</a>
+							</li>
+			{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MOD') %}
+			<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+									ADMIN
+								</a>
+								<ul class="dropdown-menu">
+									<li>
+										<a class="nav-link text-warning" href="{{path('app_utilisateur')}}">Liste users</a>
+										<a class="nav-link text-warning" href="{{path('app_liste_contacts')}}">Liste des contacts</a>
+											<a class="nav-link text-warning" href="{{path('app_statistics')}}">Statistiques</a>
+									</li>
+								</ul>
+							</li>
+				
 			{% endif %}
-			<li class="nav-item">
-				<a class="nav-link" href="{{path('app_logout')}}">
-					{{app.user.email}}
-					<i class="bi
-																																bi-x-circle-fill"></i>
-				</a>
-			</li>
+			
 		{% endif %}
-		{% if app.user %}
-			<li class="nav-item">
-				<a class="nav-link" href="{{ path('app_profil') }}">Mon Profil</a>
-			</li>
-		{% endif %}
+		
 	</div>
-</html></div></html></html></nav>{% for message in app.flashes('notice') %}<h2 class="alert alert-warning text-center mt-4 mb-4" role="alert">{{ message }}</h2>{% endfor %}<body>{% block body %}Share{% endblock %}{% block javascripts %}<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>{% endblock %}</body></html>
+</html></div></html></html></nav>{% for message in app.flashes('notice') %}<h2 class="alert alert-primary text-center mt-4 mb-4" role="alert">{{ message }}</h2>{% endfor %}<body>{% block body %}Share{% endblock %}{% block javascripts %}<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>{% endblock %}</body></html>
             {{ encore_entry_script_tags('app') }}

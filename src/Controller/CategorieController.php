@@ -15,7 +15,7 @@ use App\Form\SupprimerCategorieType;
 
 final class CategorieController extends AbstractController
 {
-    #[Route('/private-liste-categories', name: 'liste-categories', methods: ['GET', 'POST'])]
+    #[Route('/mod-private-liste-categories', name: 'liste-categories', methods: ['GET', 'POST'])]
     public function listecategories(Request $request, CategorieRepository $categorieRepository, EntityManagerInterface $em): Response
     {
         $categories = $categorieRepository->findBy([], ['libelle' => 'ASC']);
