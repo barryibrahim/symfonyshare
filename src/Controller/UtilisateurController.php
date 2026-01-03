@@ -92,21 +92,18 @@ final class UtilisateurController extends AbstractController
             'logConnexions' => $logConnexions,
         ]);
     }
+    
     #[Route('/admin-statistics', name: 'app_statistics')]
     public function statistics(UserRepository $userRepository): Response
     {
-        $totalUsers = $userRepository->count([]);
-        $activeUsers = $userRepository->count(['status' => 'active']);
-        $disabledUsers = $userRepository->count(['status' => 'disabled']);
-        $adminUsers = $userRepository->count(['roles' => 'ROLE_ADMIN']);
-
         return $this->render('utilisateur/statistics.html.twig', [
-            'total' => $totalUsers,
-            'active' => $activeUsers,
-            'disabled' => $disabledUsers,
-            'admins' => $adminUsers,
+            'total' => $userRepository->countAllUsers(),
+            'active' => $userRepository->countActiveUsers(),
+            'disabled' => $userRepository->countDisabledUsers(),
+            'admins' => $userRepository->countAdmins(),
         ]);
     }
+
 
 
 
