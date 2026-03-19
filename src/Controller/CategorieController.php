@@ -45,20 +45,20 @@ final class CategorieController extends AbstractController
     {
         $categorie = new Categorie();
 
-        // Créer le formulaire
+        
         $form = $this->createForm(CategorieType::class, $categorie);
         $form->handleRequest($request);
 
-        // Si le formulaire est soumis et valide, enregistrer en BDD
+       
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($categorie);
             $em->flush();
 
-            // Rediriger vers la liste ou autre
-            return $this->redirectToRoute('app_categorie'); // adapte cette route à ton projet
+          
+            return $this->redirectToRoute('app_categorie'); 
         }
 
-        // Afficher le formulaire
+      
         return $this->render('categorie/ajout.html.twig', [
             'form' => $form->createView(),
         ]);

@@ -1,0 +1,15 @@
+<h3>Historique des statuts de {{ user.email }}</h3>
+
+<table border="1" cellpadding="5">
+    <tr>
+        <th>Date</th>
+        <th>Statut</th>
+    </tr>
+
+    {% for status in statuses %}
+        <tr>
+            <td>{{ status.date|date('d/m/Y') }}</td>
+            <td>{{ status.type.libelle }}</td>
+        </tr>
+    {% endfor %}
+</table>

@@ -55,6 +55,8 @@
 											<td>{{ user.description }}</td>
 											<td>{{ user.pseudo }}</td>
 											<td>{{ user.status }}</td>
+											<td>{% for status in user.userstatuses %}{{status.li}}{% endfor %}</td> 
+
 									</td>
 									<td><a href="{{path("app_edit_user",{'id':user.id})}}"><i class="bi bi-pen-fill" style="color: black;"></i></a></td>
 								<td><a href="{{path("app_delete_user",{'id':user.id})}}"><i class="bi bi-trash-fill" style="color: black;"></i></a></td>

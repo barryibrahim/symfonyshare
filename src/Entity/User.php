@@ -81,12 +81,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Photo $photo = null;
 
+    /**
+     * @var Collection<int, Userstatus>
+     */
+    #[ORM\OneToMany(targetEntity: Userstatus::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $userstatuses;
+
   
 
     public function __construct()
     {
         $this->fichiers = new ArrayCollection();
         $this->logConnexions = new ArrayCollection();
+        $this->userstatuses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -362,6 +369,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->photo = $photo;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Userstatus>
+     */
+    public function getUserstatuses(): Collection
+    {
+        return $this->userstatuses;
+    }
+
+    public function addUserstatus(Userstatus $userstatus): static
+    {
+        if (!$this->userstatuses->contains($userstatus)) {
+            $this->userstatuses->add($userstatus);
+            $userstatus->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserstatus(Userstatus $userstatus): static
+    {
+        if ($this->userstatuses->removeElement($userstatus)) {
+            // set the owning side to null (unless already changed)
+            if ($userstatus->getUser() === $this) {
+                $userstatus->setUser(null);
+            }
+        }
 
         return $this;
     }

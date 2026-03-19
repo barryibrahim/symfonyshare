@@ -92,7 +92,7 @@ final class UtilisateurController extends AbstractController
             'logConnexions' => $logConnexions,
         ]);
     }
-    
+
     #[Route('/admin-statistics', name: 'app_statistics')]
     public function statistics(UserRepository $userRepository): Response
     {
